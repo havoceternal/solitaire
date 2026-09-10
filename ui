@@ -1,0 +1,111 @@
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/havoceternal/uilib/refs/heads/main/uilib'))()
+local ThemeManager = loadstring(game:HttpGet('https://raw.githubusercontent.com/havoceternal/uilibthememanagerlol/refs/heads/main/theme'))()
+local SaveManager = loadstring(game:HttpGet('https://raw.githubusercontent.com/havoceternal/savemanager/refs/heads/main/savemanager'))()
+
+local UI = {}
+
+function UI:Initialize()
+    local Window = Library:CreateWindow({
+        Title = "Solitaire";
+        Centre = true;
+        AutoShow = true;
+        TabPadding = 8;
+        MenuFadeTime = 0;
+    })
+
+    local Tabs = {
+        Main = Window:AddTab("Main");
+        Character = Window:AddTab("Character");
+        Settings = Window:AddTab("settings");
+    }
+
+    -- MAIN TAB
+    local AimGroupBox = Tabs.Main:AddLeftGroupbox("Aiming")
+    local GunGroupBox = Tabs.Main:AddRightGroupbox("gun")
+
+    AimGroupBox:AddToggle("CamLock", {
+        Text = "enabled"
+    }):AddKeyPicker("CamLockKey",{
+        Text = "cam lock";
+        Default = "E";
+        Mode = "Toggle";
+        NoUI = false;
+    })
+
+    GunGroupBox:AddToggle("KillAuraToggle", {
+        Text = "enabled"
+    }):AddKeyPicker("KillAuraKey",{
+        Text = "kill aura";
+        Default = "T";
+        Mode = "Toggle";
+        NoUI = false;
+    })
+
+    -- CHARACTER TAB
+    local MovementGroupBox = Tabs.Character:AddLeftGroupbox("movement")
+    MovementGroupBox:AddToggle("VelocityToggle",{
+		Text = "velocity"
+	}):AddKeyPicker("VelocityKey",{
+		Text = "velocity";
+		Default = "X";
+		Mode = "Toggle";
+		NoUI = false;
+	})
+	MovementGroupBox:AddToggle("WalkSpeedToggle",{
+		Text = "walk speed"
+	})
+	MovementGroupBox:AddToggle("JumpPowerToggle",{
+		Text = "jump power"
+	})
+	MovementGroupBox:AddSlider("VelocitySpeed",{
+		Text = "velocity speed";
+		Default = 99;
+		Min = 1;
+		Max = 1000;
+		Rounding = 0;
+		Compact = true;
+		Suffix = "s";
+	})
+	MovementGroupBox:AddSlider("WalkSpeed",{
+		Text = "walk speed";
+		Default = 16;
+		Min = 1;
+		Max = 1000;
+		Rounding = 0;
+		Compact = true;
+		Suffix = "s";
+	})
+	MovementGroupBox:AddSlider("JumpPower",{
+		Text = "jump power";
+		Default = 50;
+		Min = 1;
+		Max = 1000;
+		Rounding = 0;
+		Compact = true;
+		Suffix = "s";
+	})
+
+	local UnloadGroupBox = Tabs.Settings:AddLeftGroupbox("unload")
+	UnloadGroupBox:AddButton("unload", function() Library:Unload() end)
+
+    Library.KeybindFrame.Visible = true
+	Library.ToggleKeybind = Enum.KeyCode.RightControl
+
+	SaveManager:SetLibrary(Library)
+	ThemeManager:SetLibrary(Library)
+	SaveManager:IgnoreThemeSettings()
+	SaveManager:SetIgnoreIndexes({ "MenuKeybind" })
+	SaveManager:BuildConfigSection(Tabs.Settings)
+	SaveManager:LoadAutoloadConfig()
+	ThemeManager:ApplyTheme("Havoc")
+    
+	return {
+		Library = Library,
+		Toggles = Toggles,
+		Options = Options,
+		ShopBuyButton = UI.ShopBuyButton,
+		ShopBuyAmmoButton = UI.ShopBuyAmmoButton,
+	}
+end
+
+return UI
