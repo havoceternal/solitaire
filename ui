@@ -24,7 +24,7 @@ function UI:Initialize()
     local GunGroupBox = Tabs.Main:AddRightGroupbox("gun")
 
     AimGroupBox:AddToggle("CamLock", {
-        Text = "enabled"
+        Text = "cam lock"
     }):AddKeyPicker("CamLockKey",{
         Text = "cam lock";
         Default = "E";
