@@ -103,8 +103,6 @@ function UI:Initialize()
 		Library = Library,
 		Toggles = Toggles,
 		Options = Options,
-		ShopBuyButton = UI.ShopBuyButton,
-		ShopBuyAmmoButton = UI.ShopBuyAmmoButton,
 	}
 end
 
