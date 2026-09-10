@@ -1,14 +1,13 @@
 local RunService = game:GetService("RunService")
-local Players = game:GetService("LocalPlayer")
-print('ran')
-local Player = Players.LocalPlayer
+
+local Player = game.Players.LocalPlayer
 
 local Character, Humanoid, HumanoidRootPart
 
 local function Setup(c)
 	Character = c
 	Humanoid = c:WaitForChild("Humanoid")
-	HumanoidRootPart = c:WaitForChild("HumanoidRootPart")=
+	HumanoidRootPart = c:WaitForChild("HumanoidRootPart")
 end
 
 Player.CharacterAdded:Connect(Setup)
