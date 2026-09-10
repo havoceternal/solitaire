@@ -1,6 +1,6 @@
 local RunService = game:GetService("RunService")
 local Players = game:GetService("LocalPlayer")
-
+print('ran')
 local Player = Players.LocalPlayer
 
 local Character, Humanoid, HumanoidRootPart
