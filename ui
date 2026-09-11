@@ -14,8 +14,9 @@ function UI:Initialize()
     })
 
     local Tabs = {
-        Main = Window:AddTab("Main");
-        Character = Window:AddTab("Character");
+        Main = Window:AddTab("main");
+        Character = Window:AddTab("character");
+		Visuals = Window:AddTab("visuals");
         Settings = Window:AddTab("settings");
     }
 
@@ -43,6 +44,7 @@ function UI:Initialize()
 
     -- CHARACTER TAB
     local MovementGroupBox = Tabs.Character:AddLeftGroupbox("movement")
+
     MovementGroupBox:AddToggle("VelocityToggle",{
 		Text = "velocity"
 	}):AddKeyPicker("VelocityKey",{
@@ -52,10 +54,12 @@ function UI:Initialize()
 		NoUI = false;
 	})
 	MovementGroupBox:AddToggle("WalkSpeedToggle",{
-		Text = "walk speed"
+		Text = "walk speed",
+		ToolTip = "only works if the game has any sort of changing speed like a shift to sprint"
 	})
 	MovementGroupBox:AddToggle("JumpPowerToggle",{
-		Text = "jump power"
+		Text = "jump power",
+		ToolTip = "only works if the game has any sort of changing jump power like a power up"
 	})
 	MovementGroupBox:AddSlider("VelocitySpeed",{
 		Text = "velocity speed";
@@ -83,6 +87,51 @@ function UI:Initialize()
 		Rounding = 0;
 		Compact = true;
 		Suffix = "s";
+	})
+
+	-- VISUALS TAB
+	local ESPGroupBox = Tabs.Visuals:AddLeftGroupbox("esp")
+
+	ESPGroupBox:AddToggle("ESPBox",{
+	Text = "box";
+	}):AddColorPicker("ESPBoxColor", {
+		Default = Color3.fromRGB(0,0,0)
+	})
+	ESPGroupBox:AddToggle("ESPName",{
+		Text = "name";
+	}):AddColorPicker("ESPNameColor", {
+		Default = Color3.fromRGB(0,0,0)
+	})
+	ESPGroupBox:AddDropdown("ESPNametype",{
+		Text = "name type";
+		Values = {"username","displayname"};
+		Default = 1;
+		Mutli = false;
+	})
+	ESPGroupBox:AddToggle("ESPWeapon",{
+		Text = "weapon"
+	}):AddColorPicker("ESPWeaponColor",{
+		Default = Color3.fromRGB(0,0,0)
+	})
+	ESPGroupBox:AddToggle("ESPDistance",{
+		Text = "distance"
+	}):AddColorPicker("ESPDistanceColor", {
+		Default = Color3.fromRGB(0,0,0)
+	})
+	local ESPHealthTG = ESPGroupBox:AddToggle("ESPHealth",{
+		Text = "health"
+	})
+	ESPHealthTG:AddColorPicker("ESPHealthUpperColor",{
+		Default = Color3.fromRGB(60, 255, 100),
+		Title = "health bar upper color"
+	})
+	ESPHealthTG:AddColorPicker("ESPHealthMidColor",{
+		Default = Color3.fromRGB(255, 220, 60),
+		Title = "health bar middle color"
+	})
+	ESPHealthTG:AddColorPicker("ESPHealthLowerColor",{
+		Default = Color3.fromRGB(255, 60, 60),
+		Title = "health bar lower color"
 	})
 
 	local UnloadGroupBox = Tabs.Settings:AddLeftGroupbox("unload")
