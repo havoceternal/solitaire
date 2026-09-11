@@ -24,6 +24,8 @@ local Style = {
 	Health = {
 		BackgroundColor = Color3.fromRGB(0, 0, 0),
 		BackgroundTransparency = 0.15,
+		OutlineColor = Color3.fromRGB(0, 0, 0),
+		OutlineThickness = 1.5,
 		Width = 4,
 		BackgroundWidth = 6,
 		Gap = 5,
@@ -88,6 +90,7 @@ local function CreateESP(Player)
 
 		HealthBackground = Drawing.new("Square"),
 		Health = Drawing.new("Square")
+        HealthOutline = Drawing.new("Square")
 	}
 
 	EspData.Box.Filled = false
@@ -115,6 +118,11 @@ local function CreateESP(Player)
 
 	EspData.Health.Filled = true
 	EspData.Health.Transparency = 1
+
+    EspData.HealthOutline.Filled = false
+	EspData.HealthOutline.Thickness = Style.Health.OutlineThickness
+	EspData.HealthOutline.Transparency = 1
+	EspData.HealthOutline.Color = Style.Health.OutlineColor
 
 	Data[Player] = EspData
 end
@@ -256,9 +264,18 @@ local function UpdateESP(Player, EspData)
 		EspData.Health.Size = Vector2.new(Style.Health.Width, HealthHeight)
 		EspData.Health.Color = GetHealthColor(HealthPercent)
 		EspData.Health.Visible = HealthHeight > 0
+
+		if HealthHeight > 0 then
+			EspData.HealthOutline.Position = Vector2.new(HealthXInner, BoxY + Style.Health.Padding)
+			EspData.HealthOutline.Size = Vector2.new(Style.Health.Width, InnerHeight)
+			EspData.HealthOutline.Visible = true
+		else
+			EspData.HealthOutline.Visible = false
+		end
 	else
 		EspData.HealthBackground.Visible = false
 		EspData.Health.Visible = false
+		EspData.HealthOutline.Visible = false
 	end
 end
 
