@@ -95,7 +95,7 @@ function UI:Initialize()
 	ESPGroupBox:AddToggle("ESPBox",{
 	Text = "box";
 	}):AddColorPicker("ESPBoxColor", {
-		Default = Color3.fromRGB(0,0,0)
+		Default = Color3.fromRGB(255,255,255)
 	})
 	ESPGroupBox:AddToggle("ESPName",{
 		Text = "name";
@@ -111,12 +111,12 @@ function UI:Initialize()
 	ESPGroupBox:AddToggle("ESPWeapon",{
 		Text = "weapon"
 	}):AddColorPicker("ESPWeaponColor",{
-		Default = Color3.fromRGB(0,0,0)
+		Default = Color3.fromRGB(255,255,255)
 	})
 	ESPGroupBox:AddToggle("ESPDistance",{
 		Text = "distance"
 	}):AddColorPicker("ESPDistanceColor", {
-		Default = Color3.fromRGB(0,0,0)
+		Default = Color3.fromRGB(255,255,255)
 	})
 	local ESPHealthTG = ESPGroupBox:AddToggle("ESPHealth",{
 		Text = "health"
