@@ -89,8 +89,8 @@ local function CreateESP(Player)
 		Weapon = Drawing.new("Text"),
 
 		HealthBackground = Drawing.new("Square"),
-		Health = Drawing.new("Square")
-        HealthOutline = Drawing.new("Square")
+		Health = Drawing.new("Square"),
+        HealthOutline = Drawing.new("Square"),
 	}
 
 	EspData.Box.Filled = false
