@@ -102,12 +102,6 @@ function UI:Initialize()
 	}):AddColorPicker("ESPNameColor", {
 		Default = Color3.fromRGB(255,255,255)
 	})
-	ESPGroupBox:AddDropdown("ESPNametype",{
-		Text = "name type";
-		Values = {"username","displayname"};
-		Default = 1;
-		Mutli = false;
-	})
 	ESPGroupBox:AddToggle("ESPWeapon",{
 		Text = "weapon"
 	}):AddColorPicker("ESPWeaponColor",{
@@ -132,6 +126,12 @@ function UI:Initialize()
 	ESPHealthTG:AddColorPicker("ESPHealthLowerColor",{
 		Default = Color3.fromRGB(255, 60, 60),
 		Title = "health bar lower color"
+	})
+	ESPGroupBox:AddDropdown("ESPNametype",{
+		Text = "name type";
+		Values = {"username","displayname"};
+		Default = 1;
+		Mutli = false;
 	})
 
 	local UnloadGroupBox = Tabs.Settings:AddLeftGroupbox("unload")
