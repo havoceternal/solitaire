@@ -100,7 +100,7 @@ function UI:Initialize()
 	ESPGroupBox:AddToggle("ESPName",{
 		Text = "name";
 	}):AddColorPicker("ESPNameColor", {
-		Default = Color3.fromRGB(0,0,0)
+		Default = Color3.fromRGB(255,255,255)
 	})
 	ESPGroupBox:AddDropdown("ESPNametype",{
 		Text = "name type";
