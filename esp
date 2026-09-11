@@ -26,6 +26,12 @@ local Style = {
 		Outline = true,
 		OutlineColor = Color3.fromRGB(0, 0, 0)
 	},
+	Weapon = {
+		Size = 11,
+		Center = true,
+		Outline = true,
+		OutlineColor = Color3.fromRGB(0, 0, 0)
+	},
 	Health = {
 		BackgroundColor = Color3.fromRGB(0, 0, 0),
 		BackgroundTransparency = 0.15,
@@ -68,6 +74,11 @@ local function GetHealthColor(HealthPercent)
 	)
 end
 
+local function GetEquippedToolName(Character)
+	local Tool = Character:FindFirstChildOfClass("Tool")
+	return Tool and Tool.Name or nil
+end
+
 local function HideESP(EspData)
 	for _, Object in pairs(EspData) do
 		if Object then
@@ -86,6 +97,8 @@ local function CreateESP(Player)
 		Name = Drawing.new("Text"),
 
 		Distance = Drawing.new("Text"),
+
+		Weapon = Drawing.new("Text"),
 
 		HealthBackground = Drawing.new("Square"),
 		Health = Drawing.new("Square"),
@@ -112,6 +125,13 @@ local function CreateESP(Player)
 	EspData.Distance.Outline = Style.Distance.Outline
 	EspData.Distance.Transparency = 1
 	EspData.Distance.OutlineColor = Style.Distance.OutlineColor
+
+	EspData.Weapon.Size = Style.Weapon.Size
+	EspData.Weapon.Center = Style.Weapon.Center
+	EspData.Weapon.Outline = Style.Weapon.Outline
+	EspData.Weapon.Transparency = 1
+
+	EspData.Weapon.OutlineColor = Style.Weapon.OutlineColor
 
 	EspData.HealthBackground.Filled = true
 	EspData.HealthBackground.Transparency = Style.Health.BackgroundTransparency
@@ -213,6 +233,7 @@ local function UpdateESP(Player, EspData)
 	end
 
 	-- Distance
+	local DistanceShown = false
 	if Toggles.ESPDistance.Value then
 		local LocalCharacter = LocalPlayer.Character
 		local LocalRoot = LocalCharacter and LocalCharacter:FindFirstChild("HumanoidRootPart")
@@ -224,11 +245,30 @@ local function UpdateESP(Player, EspData)
 			EspData.Distance.Position = Vector2.new(Position.X, BoxY + Height + 3)
 			EspData.Distance.Color = Options.ESPDistanceColor.Value
 			EspData.Distance.Visible = true
+			DistanceShown = true
 		else
 			EspData.Distance.Visible = false
 		end
 	else
 		EspData.Distance.Visible = false
+	end
+
+	-- Weapon (equipped tool name)
+	if Toggles.ESPWeapon.Value then
+		local WeaponName = GetEquippedToolName(Character)
+
+		if WeaponName then
+			-- stack below Distance if it's shown, otherwise right under the box
+			local WeaponY = DistanceShown and (BoxY + Height + 16) or (BoxY + Height + 3)
+
+			EspData.Weapon.Text = "[" .. WeaponName .. "]"
+			EspData.Weapon.Position = Vector2.new(Position.X, WeaponY)
+			EspData.Weapon.Visible = true
+		else
+			EspData.Weapon.Visible = false
+		end
+	else
+		EspData.Weapon.Visible = false
 	end
 
 	-- Health
@@ -262,6 +302,23 @@ local function UpdateESP(Player, EspData)
 		EspData.HealthBackground.Visible = false
 		EspData.Health.Visible = false
 		EspData.HealthOutline.Visible = false
+	end
+    
+	if Toggles.ESPWeapon.Value then
+		local WeaponName = GetEquippedToolName(Character)
+
+		if WeaponName then
+			local WeaponY = DistanceShown and (BoxY + Height + 16) or (BoxY + Height + 3)
+
+			EspData.Weapon.Text = "[" .. WeaponName .. "]"
+			EspData.Weapon.Position = Vector2.new(Position.X, WeaponY)
+			EspData.Weapon.Color = Options.ESPWeaponColor.Value
+			EspData.Weapon.Visible = true
+		else
+			EspData.Weapon.Visible = false
+		end
+	else
+		EspData.Weapon.Visible = false
 	end
 end
 
