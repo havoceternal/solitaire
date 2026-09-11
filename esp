@@ -9,34 +9,21 @@ local Style = {
 		Thickness = 1.5,
 		Transparency = 1
 	},
-	BoxOutline = {
-		Color = Color3.fromRGB(0, 0, 0),
-		Thickness = 3,
-		Transparency = 1
-	},
 	Name = {
 		Size = 13,
-		Center = true,
-		Outline = true,
-		OutlineColor = Color3.fromRGB(0, 0, 0)
+		Center = true
 	},
 	Distance = {
 		Size = 11,
-		Center = true,
-		Outline = true,
-		OutlineColor = Color3.fromRGB(0, 0, 0)
+		Center = true
 	},
 	Weapon = {
 		Size = 11,
-		Center = true,
-		Outline = true,
-		OutlineColor = Color3.fromRGB(0, 0, 0)
+		Center = true
 	},
 	Health = {
 		BackgroundColor = Color3.fromRGB(0, 0, 0),
 		BackgroundTransparency = 0.15,
-		OutlineColor = Color3.fromRGB(0, 0, 0),
-		OutlineThickness = 1.5,
 		Width = 4,
 		BackgroundWidth = 6,
 		Gap = 5,
@@ -92,7 +79,6 @@ local function CreateESP(Player)
 
 	local EspData = {
 		Box = Drawing.new("Square"),
-		BoxOutline = Drawing.new("Square"),
 
 		Name = Drawing.new("Text"),
 
@@ -101,37 +87,27 @@ local function CreateESP(Player)
 		Weapon = Drawing.new("Text"),
 
 		HealthBackground = Drawing.new("Square"),
-		Health = Drawing.new("Square"),
-		HealthOutline = Drawing.new("Square")
+		Health = Drawing.new("Square")
 	}
 
 	EspData.Box.Filled = false
 	EspData.Box.Thickness = Style.Box.Thickness
 	EspData.Box.Transparency = Style.Box.Transparency
 
-	EspData.BoxOutline.Filled = false
-	EspData.BoxOutline.Thickness = Style.BoxOutline.Thickness
-	EspData.BoxOutline.Transparency = Style.BoxOutline.Transparency
-	EspData.BoxOutline.Color = Style.BoxOutline.Color
-
 	EspData.Name.Size = Style.Name.Size
 	EspData.Name.Center = Style.Name.Center
-	EspData.Name.Outline = Style.Name.Outline
+	EspData.Name.Outline = false
 	EspData.Name.Transparency = 1
-	EspData.Name.OutlineColor = Style.Name.OutlineColor
 
 	EspData.Distance.Size = Style.Distance.Size
 	EspData.Distance.Center = Style.Distance.Center
-	EspData.Distance.Outline = Style.Distance.Outline
+	EspData.Distance.Outline = false
 	EspData.Distance.Transparency = 1
-	EspData.Distance.OutlineColor = Style.Distance.OutlineColor
 
 	EspData.Weapon.Size = Style.Weapon.Size
 	EspData.Weapon.Center = Style.Weapon.Center
-	EspData.Weapon.Outline = Style.Weapon.Outline
+	EspData.Weapon.Outline = false
 	EspData.Weapon.Transparency = 1
-
-	EspData.Weapon.OutlineColor = Style.Weapon.OutlineColor
 
 	EspData.HealthBackground.Filled = true
 	EspData.HealthBackground.Transparency = Style.Health.BackgroundTransparency
@@ -139,11 +115,6 @@ local function CreateESP(Player)
 
 	EspData.Health.Filled = true
 	EspData.Health.Transparency = 1
-
-	EspData.HealthOutline.Filled = false
-	EspData.HealthOutline.Thickness = Style.Health.OutlineThickness
-	EspData.HealthOutline.Transparency = 1
-	EspData.HealthOutline.Color = Style.Health.OutlineColor
 
 	Data[Player] = EspData
 end
@@ -206,19 +177,14 @@ local function UpdateESP(Player, EspData)
 	local BoxX = Position.X - Width / 2
 	local BoxY = Position.Y - Height / 2
 
-	-- Box (+ outline, tied to same toggle)
+	-- Box
 	if Toggles.ESPBox.Value then
 		EspData.Box.Position = Vector2.new(BoxX, BoxY)
 		EspData.Box.Size = Vector2.new(Width, Height)
 		EspData.Box.Color = Options.ESPBoxColor.Value
 		EspData.Box.Visible = true
-
-		EspData.BoxOutline.Position = Vector2.new(BoxX, BoxY)
-		EspData.BoxOutline.Size = Vector2.new(Width, Height)
-		EspData.BoxOutline.Visible = true
 	else
 		EspData.Box.Visible = false
-		EspData.BoxOutline.Visible = false
 	end
 
 	-- Name
@@ -258,11 +224,11 @@ local function UpdateESP(Player, EspData)
 		local WeaponName = GetEquippedToolName(Character)
 
 		if WeaponName then
-			-- stack below Distance if it's shown, otherwise right under the box
 			local WeaponY = DistanceShown and (BoxY + Height + 16) or (BoxY + Height + 3)
 
 			EspData.Weapon.Text = "[" .. WeaponName .. "]"
 			EspData.Weapon.Position = Vector2.new(Position.X, WeaponY)
+			EspData.Weapon.Color = Options.ESPWeaponColor.Value
 			EspData.Weapon.Visible = true
 		else
 			EspData.Weapon.Visible = false
@@ -290,35 +256,9 @@ local function UpdateESP(Player, EspData)
 		EspData.Health.Size = Vector2.new(Style.Health.Width, HealthHeight)
 		EspData.Health.Color = GetHealthColor(HealthPercent)
 		EspData.Health.Visible = HealthHeight > 0
-
-		if HealthHeight > 0 then
-			EspData.HealthOutline.Position = Vector2.new(HealthXInner, BoxY + Style.Health.Padding)
-			EspData.HealthOutline.Size = Vector2.new(Style.Health.Width, InnerHeight)
-			EspData.HealthOutline.Visible = true
-		else
-			EspData.HealthOutline.Visible = false
-		end
 	else
 		EspData.HealthBackground.Visible = false
 		EspData.Health.Visible = false
-		EspData.HealthOutline.Visible = false
-	end
-    
-	if Toggles.ESPWeapon.Value then
-		local WeaponName = GetEquippedToolName(Character)
-
-		if WeaponName then
-			local WeaponY = DistanceShown and (BoxY + Height + 16) or (BoxY + Height + 3)
-
-			EspData.Weapon.Text = "[" .. WeaponName .. "]"
-			EspData.Weapon.Position = Vector2.new(Position.X, WeaponY)
-			EspData.Weapon.Color = Options.ESPWeaponColor.Value
-			EspData.Weapon.Visible = true
-		else
-			EspData.Weapon.Visible = false
-		end
-	else
-		EspData.Weapon.Visible = false
 	end
 end
 
