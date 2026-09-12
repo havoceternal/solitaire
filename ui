@@ -6,10 +6,10 @@ local UI = {}
 
 function UI:Initialize()
     local Window = Library:CreateWindow({
-        Title = "Solitaire";
+        Title = "SOLITAIRE";
         Centre = true;
         AutoShow = true;
-        TabPadding = 8;
+        TabPadding = 14;
         MenuFadeTime = 0;
     })
 
@@ -21,27 +21,38 @@ function UI:Initialize()
     }
 
     -- MAIN TAB
-    local AimGroupBox = Tabs.Main:AddLeftGroupbox("Aiming")
+    local CameraGroupBox = Tabs.Main:AddLeftGroupbox("camera")
     local GunGroupBox = Tabs.Main:AddRightGroupbox("gun")
 
-    AimGroupBox:AddToggle("CamLock", {
+    CameraGroupBox:AddToggle("CameraLock", {
         Text = "cam lock"
-    }):AddKeyPicker("CamLockKey",{
+    }):AddKeyPicker("CameraLockKey",{
         Text = "cam lock";
         Default = "E";
         Mode = "Toggle";
         NoUI = false;
     })
-
-    GunGroupBox:AddToggle("KillAuraToggle", {
-        Text = "enabled"
-    }):AddKeyPicker("KillAuraKey",{
-        Text = "kill aura";
-        Default = "T";
-        Mode = "Toggle";
-        NoUI = false;
-    })
-
+	CameraGroupBox:AddToggle("CameraFriendCheck",{
+		Text = "friend check"
+	})
+	CameraGroupBox:AddToggle("CameraWallCheck",{
+		Text = "wall check"
+	})
+	local CameraRadiusDepBox = CameraGroupBox:AddDependencyBox()
+	CameraGroupBox:AddToggle("CameraShowRadius",{
+		Text = "show radius"
+	})
+	CameraRadiusDepBox:SetupDependencies({
+		{Toggles.CameraShowRadius, true}
+	})
+	CameraRadiusDepBox:AddSlider("CameraRadiusSize",{
+		Text = "size';
+		Default = 200;
+		Min = 50;
+		Max = 800;
+		Rounding = 2;
+		Compact = false;
+	})
     -- CHARACTER TAB
     local MovementGroupBox = Tabs.Character:AddLeftGroupbox("movement")
 
@@ -55,11 +66,11 @@ function UI:Initialize()
 	})
 	MovementGroupBox:AddToggle("WalkSpeedToggle",{
 		Text = "walk speed",
-		ToolTip = "only works if the game has any sort of changing speed like a shift to sprint"
+		Tooltip = "only works if the game has any sort of changing speed"
 	})
 	MovementGroupBox:AddToggle("JumpPowerToggle",{
 		Text = "jump power",
-		ToolTip = "only works if the game has any sort of changing jump power like a power up"
+		Tooltip = "only works if the game has any sort of changing jump power"
 	})
 	MovementGroupBox:AddSlider("VelocitySpeed",{
 		Text = "velocity speed";
@@ -113,19 +124,19 @@ function UI:Initialize()
 		Default = Color3.fromRGB(255,255,255)
 	})
 	local ESPHealthTG = ESPGroupBox:AddToggle("ESPHealth",{
-		Text = "health"
+		Text = "healthbar"
 	})
 	ESPHealthTG:AddColorPicker("ESPHealthUpperColor",{
 		Default = Color3.fromRGB(60, 255, 100),
-		Title = "health bar upper color"
+		Title = "upper"
 	})
 	ESPHealthTG:AddColorPicker("ESPHealthMidColor",{
 		Default = Color3.fromRGB(255, 220, 60),
-		Title = "health bar middle color"
+		Title = "middle"
 	})
 	ESPHealthTG:AddColorPicker("ESPHealthLowerColor",{
 		Default = Color3.fromRGB(255, 60, 60),
-		Title = "health bar lower color"
+		Title = "lower"
 	})
 	ESPGroupBox:AddDropdown("ESPNametype",{
 		Text = "name type";
