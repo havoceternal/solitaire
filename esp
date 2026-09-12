@@ -9,7 +9,7 @@ local Style = {
 		Thickness = 1,
 		Transparency = 1,
 
-		OutlineThickness = 2,
+		OutlineThickness = 3,
 		OutlineColor = Color3.fromRGB(0, 0, 0),
 		OutlineTransparency = 1
 	},
