@@ -236,27 +236,37 @@ local function UpdateESP(Player, EspData)
 
 	if Toggles.ESPBox.Value then
 
-		-- Outline is slightly larger than the actual box
-		local OutlineOffset = Style.Box.OutlineThickness
-
+		local OutlineThickness = Style.Box.OutlineThickness
+	
+		-- Outline box
 		EspData.BoxOutline.Position = Vector2.new(
-			BoxX - OutlineOffset,
-			BoxY - OutlineOffset
+			BoxX - OutlineThickness,
+			BoxY - OutlineThickness
 		)
-
+	
 		EspData.BoxOutline.Size = Vector2.new(
-			Width + OutlineOffset * 2,
-			Height + OutlineOffset * 2
+			Width + (OutlineThickness * 2),
+			Height + (OutlineThickness * 2)
 		)
-
+	
+		EspData.BoxOutline.Color = Style.Box.OutlineColor
+		EspData.BoxOutline.Thickness = OutlineThickness
 		EspData.BoxOutline.Visible = true
-
-		-- Actual box
-		EspData.Box.Position = Vector2.new(BoxX, BoxY)
-		EspData.Box.Size = Vector2.new(Width, Height)
+	
+		-- Main box, centered inside the outline
+		EspData.Box.Position = Vector2.new(
+			BoxX,
+			BoxY
+		)
+	
+		EspData.Box.Size = Vector2.new(
+			Width,
+			Height
+		)
+	
 		EspData.Box.Color = Options.ESPBoxColor.Value
 		EspData.Box.Visible = true
-
+	
 	else
 		EspData.Box.Visible = false
 		EspData.BoxOutline.Visible = false
