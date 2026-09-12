@@ -3,29 +3,42 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
--- Static, non-configurable style values (thickness, sizing, layout)
+-- Static, non-configurable style values
 local Style = {
 	Box = {
 		Thickness = 1.5,
-		Transparency = 1
+		Transparency = 1,
+
+		OutlineThickness = 1,
+		OutlineColor = Color3.fromRGB(0, 0, 0),
+		OutlineTransparency = 1
 	},
+
 	Name = {
 		Size = 13,
-		Center = true
+		Center = true,
+		OutlineColor = Color3.fromRGB(0, 0, 0)
 	},
+
 	Distance = {
 		Size = 11,
-		Center = true
+		Center = true,
+		OutlineColor = Color3.fromRGB(0, 0, 0)
 	},
+
 	Weapon = {
 		Size = 11,
-		Center = true
+		Center = true,
+		OutlineColor = Color3.fromRGB(0, 0, 0)
 	},
+
 	Health = {
 		BackgroundColor = Color3.fromRGB(0, 0, 0),
 		BackgroundTransparency = 0.15,
+
 		OutlineColor = Color3.fromRGB(0, 0, 0),
 		OutlineThickness = 1.5,
+
 		Width = 4,
 		BackgroundWidth = 6,
 		Gap = 5,
@@ -47,6 +60,7 @@ local function GetHealthColor(HealthPercent)
 
 	if HealthPercent >= 0.5 then
 		local Alpha = (HealthPercent - 0.5) * 2
+
 		return Color3.new(
 			MidColor.R + (HealthColor.R - MidColor.R) * Alpha,
 			MidColor.G + (HealthColor.G - MidColor.G) * Alpha,
@@ -77,49 +91,69 @@ local function HideESP(EspData)
 end
 
 local function CreateESP(Player)
-	if Data[Player] then return end
+	if Data[Player] then
+		return
+	end
 
 	local EspData = {
+		-- Main box
+		BoxOutline = Drawing.new("Square"),
 		Box = Drawing.new("Square"),
 
+		-- Text
 		Name = Drawing.new("Text"),
-
 		Distance = Drawing.new("Text"),
-
 		Weapon = Drawing.new("Text"),
 
+		-- Health
 		HealthBackground = Drawing.new("Square"),
 		Health = Drawing.new("Square"),
-        HealthOutline = Drawing.new("Square"),
+		HealthOutline = Drawing.new("Square")
 	}
 
+	-- Main box outline
+	EspData.BoxOutline.Filled = false
+	EspData.BoxOutline.Thickness = Style.Box.OutlineThickness
+	EspData.BoxOutline.Transparency = Style.Box.OutlineTransparency
+	EspData.BoxOutline.Color = Style.Box.OutlineColor
+
+	-- Main box
 	EspData.Box.Filled = false
 	EspData.Box.Thickness = Style.Box.Thickness
 	EspData.Box.Transparency = Style.Box.Transparency
 
+	-- Name
 	EspData.Name.Size = Style.Name.Size
 	EspData.Name.Center = Style.Name.Center
-	EspData.Name.Outline = false
+	EspData.Name.Outline = true
+	EspData.Name.OutlineColor = Style.Name.OutlineColor
 	EspData.Name.Transparency = 1
 
+	-- Distance
 	EspData.Distance.Size = Style.Distance.Size
 	EspData.Distance.Center = Style.Distance.Center
-	EspData.Distance.Outline = false
+	EspData.Distance.Outline = true
+	EspData.Distance.OutlineColor = Style.Distance.OutlineColor
 	EspData.Distance.Transparency = 1
 
+	-- Weapon
 	EspData.Weapon.Size = Style.Weapon.Size
 	EspData.Weapon.Center = Style.Weapon.Center
-	EspData.Weapon.Outline = false
+	EspData.Weapon.Outline = true
+	EspData.Weapon.OutlineColor = Style.Weapon.OutlineColor
 	EspData.Weapon.Transparency = 1
 
+	-- Health background
 	EspData.HealthBackground.Filled = true
 	EspData.HealthBackground.Transparency = Style.Health.BackgroundTransparency
 	EspData.HealthBackground.Color = Style.Health.BackgroundColor
 
+	-- Health
 	EspData.Health.Filled = true
 	EspData.Health.Transparency = 1
 
-    EspData.HealthOutline.Filled = false
+	-- Health outline
+	EspData.HealthOutline.Filled = false
 	EspData.HealthOutline.Thickness = Style.Health.OutlineThickness
 	EspData.HealthOutline.Transparency = 1
 	EspData.HealthOutline.Color = Style.Health.OutlineColor
@@ -129,7 +163,10 @@ end
 
 local function RemoveESP(Player)
 	local EspData = Data[Player]
-	if not EspData then return end
+
+	if not EspData then
+		return
+	end
 
 	for _, Object in pairs(EspData) do
 		if Object then
@@ -151,6 +188,7 @@ local function UpdateESP(Player, EspData)
 	end
 
 	local Character = Player.Character
+
 	if not Character then
 		HideESP(EspData)
 		return
@@ -172,8 +210,14 @@ local function UpdateESP(Player, EspData)
 		return
 	end
 
-	local HeadTop = Camera:WorldToViewportPoint(Head.Position + Vector3.new(0, 0.7, 0))
-	local LowerBottom = Camera:WorldToViewportPoint(RootPart.Position - Vector3.new(0, 3, 0))
+	local HeadTop = Camera:WorldToViewportPoint(
+		Head.Position + Vector3.new(0, 0.7, 0)
+	)
+
+	local LowerBottom = Camera:WorldToViewportPoint(
+		RootPart.Position - Vector3.new(0, 3, 0)
+	)
+
 	local Height = math.abs(HeadTop.Y - LowerBottom.Y)
 
 	if Height <= 0 then
@@ -182,96 +226,232 @@ local function UpdateESP(Player, EspData)
 	end
 
 	local Width = Height / 1.6
+
 	local BoxX = Position.X - Width / 2
 	local BoxY = Position.Y - Height / 2
 
-	-- Box
+	-- ============================================
+	-- BOX
+	-- ============================================
+
 	if Toggles.ESPBox.Value then
+
+		-- Outline is slightly larger than the actual box
+		local OutlineOffset = Style.Box.OutlineThickness
+
+		EspData.BoxOutline.Position = Vector2.new(
+			BoxX - OutlineOffset,
+			BoxY - OutlineOffset
+		)
+
+		EspData.BoxOutline.Size = Vector2.new(
+			Width + OutlineOffset * 2,
+			Height + OutlineOffset * 2
+		)
+
+		EspData.BoxOutline.Visible = true
+
+		-- Actual box
 		EspData.Box.Position = Vector2.new(BoxX, BoxY)
 		EspData.Box.Size = Vector2.new(Width, Height)
 		EspData.Box.Color = Options.ESPBoxColor.Value
 		EspData.Box.Visible = true
+
 	else
 		EspData.Box.Visible = false
+		EspData.BoxOutline.Visible = false
 	end
 
-	-- Name
+	-- ============================================
+	-- NAME
+	-- ============================================
+
 	if Toggles.ESPName.Value then
+
 		local NameType = Options.ESPNametype.Value
-		EspData.Name.Text = (NameType == "displayname") and Player.DisplayName or Player.Name
-		EspData.Name.Position = Vector2.new(Position.X, BoxY - 16)
+
+		EspData.Name.Text =
+			(NameType == "displayname")
+			and Player.DisplayName
+			or Player.Name
+
+		EspData.Name.Position = Vector2.new(
+			Position.X,
+			BoxY - 16
+		)
+
 		EspData.Name.Color = Options.ESPNameColor.Value
 		EspData.Name.Visible = true
+
 	else
 		EspData.Name.Visible = false
 	end
 
-	-- Distance
+	-- ============================================
+	-- DISTANCE
+	-- ============================================
+
 	local DistanceShown = false
+
 	if Toggles.ESPDistance.Value then
+
 		local LocalCharacter = LocalPlayer.Character
-		local LocalRoot = LocalCharacter and LocalCharacter:FindFirstChild("HumanoidRootPart")
+		local LocalRoot = LocalCharacter
+			and LocalCharacter:FindFirstChild("HumanoidRootPart")
 
 		if LocalRoot then
-			local Distance = (LocalRoot.Position - RootPart.Position).Magnitude
 
-			EspData.Distance.Text = string.format("%d studs", math.floor(Distance + 0.5))
-			EspData.Distance.Position = Vector2.new(Position.X, BoxY + Height + 3)
-			EspData.Distance.Color = Options.ESPDistanceColor.Value
+			local Distance =
+				(LocalRoot.Position - RootPart.Position).Magnitude
+
+			EspData.Distance.Text =
+				string.format("%d studs", math.floor(Distance + 0.5))
+
+			EspData.Distance.Position = Vector2.new(
+				Position.X,
+				BoxY + Height + 3
+			)
+
+			EspData.Distance.Color =
+				Options.ESPDistanceColor.Value
+
 			EspData.Distance.Visible = true
+
 			DistanceShown = true
+
 		else
 			EspData.Distance.Visible = false
 		end
+
 	else
 		EspData.Distance.Visible = false
 	end
 
-	-- Weapon (equipped tool name)
+	-- ============================================
+	-- WEAPON
+	-- ============================================
+
 	if Toggles.ESPWeapon.Value then
+
 		local WeaponName = GetEquippedToolName(Character)
 
 		if WeaponName then
-			local WeaponY = DistanceShown and (BoxY + Height + 16) or (BoxY + Height + 3)
 
-			EspData.Weapon.Text = "[" .. WeaponName .. "]"
-			EspData.Weapon.Position = Vector2.new(Position.X, WeaponY)
-			EspData.Weapon.Color = Options.ESPWeaponColor.Value
+			local WeaponY =
+				DistanceShown
+				and (BoxY + Height + 16)
+				or (BoxY + Height + 3)
+
+			EspData.Weapon.Text =
+				"[" .. WeaponName .. "]"
+
+			EspData.Weapon.Position = Vector2.new(
+				Position.X,
+				WeaponY
+			)
+
+			EspData.Weapon.Color =
+				Options.ESPWeaponColor.Value
+
 			EspData.Weapon.Visible = true
+
 		else
 			EspData.Weapon.Visible = false
 		end
+
 	else
 		EspData.Weapon.Visible = false
 	end
 
-	-- Health
-	if Toggles.ESPHealth.Value then
-		local HealthPercent = math.clamp(Humanoid.Health / math.max(Humanoid.MaxHealth, 1), 0, 1)
-		local BackgroundWidth = Style.Health.BackgroundWidth
-		local HealthX = BoxX - Style.Health.Gap - BackgroundWidth
+	-- ============================================
+	-- HEALTH
+	-- ============================================
 
-		EspData.HealthBackground.Position = Vector2.new(HealthX, BoxY)
-		EspData.HealthBackground.Size = Vector2.new(BackgroundWidth, Height)
+	if Toggles.ESPHealth.Value then
+
+		local HealthPercent =
+			math.clamp(
+				Humanoid.Health /
+					math.max(Humanoid.MaxHealth, 1),
+				0,
+				1
+			)
+
+		local BackgroundWidth =
+			Style.Health.BackgroundWidth
+
+		local HealthX =
+			BoxX
+			- Style.Health.Gap
+			- BackgroundWidth
+
+		-- Health background
+		EspData.HealthBackground.Position = Vector2.new(
+			HealthX,
+			BoxY
+		)
+
+		EspData.HealthBackground.Size = Vector2.new(
+			BackgroundWidth,
+			Height
+		)
+
 		EspData.HealthBackground.Visible = true
 
-		local InnerHeight = Height - Style.Health.Padding * 2
-		local HealthHeight = InnerHeight * HealthPercent
-		local HealthXInner = HealthX + (BackgroundWidth - Style.Health.Width) / 2
-		local HealthY = BoxY + Style.Health.Padding + InnerHeight - HealthHeight
+		-- Health bar
+		local InnerHeight =
+			Height - Style.Health.Padding * 2
 
-		EspData.Health.Position = Vector2.new(HealthXInner, HealthY)
-		EspData.Health.Size = Vector2.new(Style.Health.Width, HealthHeight)
-		EspData.Health.Color = GetHealthColor(HealthPercent)
-		EspData.Health.Visible = HealthHeight > 0
+		local HealthHeight =
+			InnerHeight * HealthPercent
 
+		local HealthXInner =
+			HealthX
+			+ (BackgroundWidth - Style.Health.Width) / 2
+
+		local HealthY =
+			BoxY
+			+ Style.Health.Padding
+			+ InnerHeight
+			- HealthHeight
+
+		EspData.Health.Position = Vector2.new(
+			HealthXInner,
+			HealthY
+		)
+
+		EspData.Health.Size = Vector2.new(
+			Style.Health.Width,
+			HealthHeight
+		)
+
+		EspData.Health.Color =
+			GetHealthColor(HealthPercent)
+
+		EspData.Health.Visible =
+			HealthHeight > 0
+
+		-- Health outline
 		if HealthHeight > 0 then
-			EspData.HealthOutline.Position = Vector2.new(HealthXInner, BoxY + Style.Health.Padding)
-			EspData.HealthOutline.Size = Vector2.new(Style.Health.Width, InnerHeight)
+
+			EspData.HealthOutline.Position =
+				Vector2.new(
+					HealthXInner,
+					BoxY + Style.Health.Padding
+				)
+
+			EspData.HealthOutline.Size =
+				Vector2.new(
+					Style.Health.Width,
+					InnerHeight
+				)
+
 			EspData.HealthOutline.Visible = true
+
 		else
 			EspData.HealthOutline.Visible = false
 		end
+
 	else
 		EspData.HealthBackground.Visible = false
 		EspData.Health.Visible = false
@@ -280,32 +460,45 @@ local function UpdateESP(Player, EspData)
 end
 
 function ESP:Initialize(SharedRefs)
+
 	Toggles = SharedRefs.Toggles
 	Options = SharedRefs.Options
 	Library = SharedRefs.Library
 
+	-- Create ESP for existing players
 	for _, Player in ipairs(Players:GetPlayers()) do
+
 		if Player ~= LocalPlayer then
 			CreateESP(Player)
 		end
+
 	end
 
+	-- New players
 	Players.PlayerAdded:Connect(function(Player)
+
 		if Player ~= LocalPlayer then
 			CreateESP(Player)
 		end
+
 	end)
 
+	-- Removed players
 	Players.PlayerRemoving:Connect(RemoveESP)
 
+	-- Update
 	RunService.RenderStepped:Connect(function()
+
 		for Player, EspData in pairs(Data) do
+
 			if Player.Parent == Players then
 				UpdateESP(Player, EspData)
 			else
 				RemoveESP(Player)
 			end
+
 		end
+
 	end)
 end
 
