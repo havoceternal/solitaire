@@ -194,14 +194,14 @@ local function UpdateESP(Player, EspData)
 	local RootPart = Character:FindFirstChild("HumanoidRootPart")
 	local Head = Character:FindFirstChild("Head")
 
-	local RootPosition, RootVis = Camera.WorldToViewportPoint(Camera, RootPart.Position)
-	local HeadPosition = Camera.WorldToViewportPoint(Camera, Head.Position + HeadOff)
-	local LegPosition = Camera.WorldToViewportPoint(Camera, RootPart.Position - LegOff)
-
 	if not Humanoid or not RootPart or not Head then
 		HideESP(EspData)
 		return
 	end
+
+	local RootPosition, RootVis = Camera.WorldToViewportPoint(Camera, RootPart.Position)
+	local HeadPosition = Camera.WorldToViewportPoint(Camera, Head.Position + HeadOff)
+	local LegPosition = Camera.WorldToViewportPoint(Camera, RootPart.Position - LegOff)
 
 	local Position, OnScreen = Camera:WorldToViewportPoint(RootPart.Position)
 
