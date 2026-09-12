@@ -9,7 +9,7 @@ function UI:Initialize()
         Title = "SOLITAIRE";
         Centre = true;
         AutoShow = true;
-        TabPadding = 14;
+        TabPadding = 12;
         MenuFadeTime = 0;
     })
 
@@ -38,8 +38,8 @@ function UI:Initialize()
 	CameraGroupBox:AddToggle("CameraWallCheck",{
 		Text = "wall check"
 	})
-	CameraGroupBox:AddToggle("CameraShowRadius",{
-		Text = "show radius"
+	CameraGroupBox:AddToggle("CameraRadius",{
+		Text = "add radius"
 	})
 	local CameraRadiusDepBox = CameraGroupBox:AddDependencyBox()
 	CameraRadiusDepBox:SetupDependencies({
