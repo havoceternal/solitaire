@@ -1,6 +1,6 @@
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+local Player = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
 -- Static, non-configurable style values (thickness, sizing, layout)
@@ -209,7 +209,7 @@ local function UpdateESP(Player, EspData)
 	-- Distance
 	local DistanceShown = false
 	if Toggles.ESPDistance.Value then
-		local LocalCharacter = LocalPlayer.Character
+		local LocalCharacter = Player.Character
 		local LocalRoot = LocalCharacter and LocalCharacter:FindFirstChild("HumanoidRootPart")
 
 		if LocalRoot then
@@ -285,13 +285,13 @@ function ESP:Initialize(SharedRefs)
 	Library = SharedRefs.Library
 
 	for _, Player in ipairs(Players:GetPlayers()) do
-		if Player ~= LocalPlayer then
+		if Player ~= Player then
 			CreateESP(Player)
 		end
 	end
 
 	Players.PlayerAdded:Connect(function(Player)
-		if Player ~= LocalPlayer then
+		if Player ~= Player then
 			CreateESP(Player)
 		end
 	end)
