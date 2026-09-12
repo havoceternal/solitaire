@@ -1,8 +1,14 @@
 local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
 
-local Player = game.Players.LocalPlayer
+local Player = Players.LocalPlayer
 
 local Character, Humanoid, HumanoidRootPart
+local NotificationTime = 3
+
+local Logic = {}
+
+local Library, Toggles, Options
 
 local function Setup(c)
 	Character = c
@@ -12,8 +18,6 @@ end
 
 Player.CharacterAdded:Connect(Setup)
 Setup(Player.Character or Player.CharacterAdded:Wait())
-
-local Logic = {}
 
 local function runLoop(controlObj, loopFn)
 	if type(controlObj) == "string" then
@@ -71,7 +75,8 @@ function Logic:Initialize(UIReference)
 	_G.Options = UIReference.Options
 	Toggles = UIReference.Toggles
 	Options = UIReference.Options
-	
+	Library = UIReference.Library
+
 	pcall(function()
 		LPH_NO_VIRTUALIZE = function(...) return (...) end
 		local newindex; newindex = hookmetamethod(game, "__newindex", LPH_NO_VIRTUALIZE(function(self, key, value)
@@ -96,6 +101,18 @@ function Logic:Initialize(UIReference)
 			local vertical = velocity.Y
 			local horizontal = direction * Options.VelocitySpeed.Value
 			HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(horizontal.X,vertical, horizontal.Z)
+		end
+	end)
+
+	Toggles.WalkSpeedToggle:OnChanged(function()
+		if Toggles.WalkSpeedToggle.Value then
+			Library:Notify("USE AT YOUR OWN RISK!", NotificationTime)
+		end
+	end)
+
+	Toggles.JumpPowerToggle:OnChanged(function()
+		if Toggles.JumpPowerToggle.Value then
+			Library:Notify("USE AT YOUR OWN RISK!", NotificationTime)
 		end
 	end)
 end
