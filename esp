@@ -3,6 +3,9 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
+local HeadOff = Vector3.new(0,0.5,0)
+local LegOff = Vector3.new(0,3,0)
+
 -- Static, non-configurable style values
 local Style = {
 	Box = {
@@ -198,7 +201,11 @@ local function UpdateESP(Player, EspData)
 	local RootPart = Character:FindFirstChild("HumanoidRootPart")
 	local Head = Character:FindFirstChild("Head")
 
-	if not Humanoid or not RootPart or not Head or Humanoid.Health <= 0 then
+	local RootPosition, RootVis = worldtoViewportPoint(Camera, RootPart.Position)
+	local HeadPosition = worldtoViewportPoint(Camera, Head.Position + HeadOff)
+	local LegPosition = worldtoViewportPoint(CurrentCamera, RootPart.Position - LegOff)
+
+	if not Humanoid or not RootPart or not Head then
 		HideESP(EspData)
 		return
 	end
@@ -239,15 +246,8 @@ local function UpdateESP(Player, EspData)
 		local OutlineThickness = Style.Box.OutlineThickness
 	
 		-- Outline
-		EspData.BoxOutline.Position = Vector2.new(
-			BoxX,
-			BoxY
-		)
-	
-		EspData.BoxOutline.Size = Vector2.new(
-			Width,
-			Height
-		)
+		EspData.BoxOutline.Size = Vector2.new(1000/RootPosition.Z,HeadPosition.Y - LegPosition.Y)
+		EspData.BoxOutline.Position = Vector2.new(RootPosition.X - EspData.BoxOutline.Size.X / 2, RootPosition.Y - EspData.BoxOutline.Size.Y / 2)
 	
 		EspData.BoxOutline.Color = Style.Box.OutlineColor
 		EspData.BoxOutline.Thickness = OutlineThickness
@@ -255,15 +255,8 @@ local function UpdateESP(Player, EspData)
 		EspData.BoxOutline.Visible = true
 	
 		-- Main box
-		EspData.Box.Position = Vector2.new(
-			BoxX,
-			BoxY
-		)
-	
-		EspData.Box.Size = Vector2.new(
-			Width,
-			Height
-		)
+		EspData.Box.Size = Vector2.new(1000/RootPosition.Z,HeadPosition.Y - LegPosition.Y)
+		EspData.Box.Position = Vector2.new(RootPosition.X - EspData.Box.Size.X / 2, RootPosition.Y - EspData.Box.Size.Y / 2)
 	
 		EspData.Box.Color = Options.ESPBoxColor.Value
 		EspData.Box.Thickness = Style.Box.Thickness
