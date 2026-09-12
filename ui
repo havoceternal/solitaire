@@ -46,7 +46,7 @@ function UI:Initialize()
 		{Toggles.CameraShowRadius, true}
 	})
 	CameraRadiusDepBox:AddSlider("CameraRadiusSize",{
-		Text = "size';
+		Text = "size";
 		Default = 200;
 		Min = 50;
 		Max = 800;
