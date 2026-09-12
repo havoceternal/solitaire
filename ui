@@ -43,7 +43,7 @@ function UI:Initialize()
 	})
 	local CameraRadiusDepBox = CameraGroupBox:AddDependencyBox()
 	CameraRadiusDepBox:SetupDependencies({
-		{Toggles.CameraShowRadius, true}
+		{Toggles.CameraRadius, true}
 	})
 	CameraRadiusDepBox:AddSlider("CameraRadiusSize",{
 		Text = "size";
