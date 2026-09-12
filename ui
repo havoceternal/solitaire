@@ -38,10 +38,10 @@ function UI:Initialize()
 	CameraGroupBox:AddToggle("CameraWallCheck",{
 		Text = "wall check"
 	})
-	local CameraRadiusDepBox = CameraGroupBox:AddDependencyBox()
 	CameraGroupBox:AddToggle("CameraShowRadius",{
 		Text = "show radius"
 	})
+	local CameraRadiusDepBox = CameraGroupBox:AddDependencyBox()
 	CameraRadiusDepBox:SetupDependencies({
 		{Toggles.CameraShowRadius, true}
 	})
@@ -52,6 +52,15 @@ function UI:Initialize()
 		Max = 800;
 		Rounding = 2;
 		Compact = false;
+	})
+	CameraGroupBox:AddDropdown("CameraLockToggleType",{
+		Values = {"Toggle","Hold"};
+		Default = 1;
+		Multi = false;
+		Text = "toggle type";
+		Callback = function(Value)
+			Options.CameraLockKey.Mode = tostring(Value)
+		end,
 	})
     -- CHARACTER TAB
     local MovementGroupBox = Tabs.Character:AddLeftGroupbox("movement")
