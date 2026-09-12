@@ -6,10 +6,10 @@ local Camera = workspace.CurrentCamera
 -- Static, non-configurable style values
 local Style = {
 	Box = {
-		Thickness = 1.5,
+		Thickness = 1,
 		Transparency = 1,
 
-		OutlineThickness = 1,
+		OutlineThickness = 2,
 		OutlineColor = Color3.fromRGB(0, 0, 0),
 		OutlineTransparency = 1
 	},
@@ -238,22 +238,23 @@ local function UpdateESP(Player, EspData)
 
 		local OutlineThickness = Style.Box.OutlineThickness
 	
-		-- Outline box
+		-- Outline
 		EspData.BoxOutline.Position = Vector2.new(
-			BoxX - OutlineThickness,
-			BoxY - OutlineThickness
+			BoxX,
+			BoxY
 		)
 	
 		EspData.BoxOutline.Size = Vector2.new(
-			Width + (OutlineThickness * 2),
-			Height + (OutlineThickness * 2)
+			Width,
+			Height
 		)
 	
 		EspData.BoxOutline.Color = Style.Box.OutlineColor
 		EspData.BoxOutline.Thickness = OutlineThickness
+		EspData.BoxOutline.Transparency = Style.Box.OutlineTransparency
 		EspData.BoxOutline.Visible = true
 	
-		-- Main box, centered inside the outline
+		-- Main box
 		EspData.Box.Position = Vector2.new(
 			BoxX,
 			BoxY
@@ -265,6 +266,8 @@ local function UpdateESP(Player, EspData)
 		)
 	
 		EspData.Box.Color = Options.ESPBoxColor.Value
+		EspData.Box.Thickness = Style.Box.Thickness
+		EspData.Box.Transparency = Style.Box.Transparency
 		EspData.Box.Visible = true
 	
 	else
