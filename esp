@@ -18,7 +18,7 @@ local Style = {
 	},
 
 	Name = {
-		Size = 13,
+		Size = 20,
 		Center = true,
 		OutlineColor = Color3.fromRGB(0, 0, 0)
 	},
