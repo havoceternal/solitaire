@@ -154,9 +154,6 @@ function UI:Initialize()
 		Mutli = false;
 	})
 
-	local UnloadGroupBox = Tabs.Settings:AddLeftGroupbox("unload")
-	UnloadGroupBox:AddButton("unload", function() Library:Unload() end)
-
     Library.KeybindFrame.Visible = true
 	Library.ToggleKeybind = Enum.KeyCode.RightControl
 
