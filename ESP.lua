@@ -257,12 +257,19 @@ local function UpdateESP(Player, EspData)
 
 	if Toggles.ESPWeapon.Value then
 		local WeaponName = GetEquippedToolName(Character)
-
+	
 		if WeaponName then
-			local WeaponY = EspData.Box.Position.Y - EspData.Distance.TextBounds.Y - EspData.Weapon.TextBounds.Y - 8
-
 			EspData.Weapon.Text = "[" .. WeaponName .. "]"
-			spData.Weapon.Position = Vector2.new(EspData.Box.Position.X + EspData.Box.Size.X / 2, WeaponY)
+	
+			local WeaponY
+	
+			if DistanceShown then
+				WeaponY = EspData.Box.Position.Y - EspData.Distance.TextBounds.Y - EspData.Weapon.TextBounds.Y - 8
+			else
+				WeaponY = EspData.Box.Position.Y - EspData.Weapon.TextBounds.Y - 4
+			end
+	
+			EspData.Weapon.Position = Vector2.new(EspData.Box.Position.X + EspData.Box.Size.X / 2, WeaponY)
 			EspData.Weapon.Color = Options.ESPWeaponColor.Value
 			EspData.Weapon.Visible = true
 		else
