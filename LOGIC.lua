@@ -1,23 +1,89 @@
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
-local Player = Players.LocalPlayer
+local LocalPlayer = Players.LocalPlayer
 
-local Character, Humanoid, HumanoidRootPart
+local Mouse = LocalPlayer:GetMouse()
+local Camera = workspace.CurrentCamera	
+
+local LocalCharacter, LocalHumanoid, LocalHumanoidRootPart
 local NotificationTime = 3
 
 local Logic = {}
 
 local Library, Toggles, Options
 
-local function Setup(c)
-	Character = c
-	Humanoid = c:WaitForChild("Humanoid")
-	HumanoidRootPart = c:WaitForChild("HumanoidRootPart")
+local function Setup(newCharacter)
+	LocalCharacter = newCharacter
+	LocalHumanoid = newCharacter:WaitForChild("Humanoid")
+	LocalHumanoidRootPart = newCharacter:WaitForChild("HumanoidRootPart")
 end
 
-Player.CharacterAdded:Connect(Setup)
-Setup(Player.Character or Player.CharacterAdded:Wait())
+LocalPlayer.CharacterAdded:Connect(Setup)
+Setup(LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait())
+
+local function checkWall(target)
+    if not LocalHumanoidRootPart then
+        return false
+    end
+
+    local targetRootPart = target:FindFirstChild("HumanoidRootPart")
+    if not targetRootPart then
+        return false
+    end
+
+    local Origin = LocalHumanoidRootPart.Position
+    local Direction = targetRootPart.Position - Origin
+
+    local Params = RaycastParams.new()
+    Params.FilterType = Enum.RaycastFilterType.Exclude
+    Params.FilterDescendantsInstances = {
+        LocalCharacter,
+        target
+    }
+
+    local Result = workspace:Raycast(Origin, Direction, Params)
+
+    return Result ~= nil
+end
+
+local function checkFriend(target)
+	return LocalPlayer:IsFriendsWith(target.UserId)
+end
+
+local function FindPlayerToMouse(radius,configurations)
+	if not LocalHumanoidRootPart then
+        return false
+    end
+	local ClosestPlayer = nil
+	local shortestDistance = math.huge
+	local mousePos = Vector2.new(Mouse.X, Mouse.Y)
+	for _, target in ipairs(Players:GetPlayers()) do
+		if target ~= LocalPlayer and target.Character then
+			local targetRootPart = target.Character:FindFirstChild("HumanoidRootPart")
+			if targetRootPart then
+				if configurations.CameraFriendCheck and checkFriend(target) then
+					continue
+				end
+
+				if configurations.CameraWallCheck and checkWall(target) then
+					continue
+				end
+
+				local screenPos, onScreen = Camera:WorldToViewportPoint(targetRootPart.Position)
+				if onScreen then
+					local screenVector = Vector2.new(screenPos.X, screenPos.Y)
+					local distance = (screenVector - mousePos).Magnitude
+					if distance < shortestDistance then
+						shortestDistance = distance
+						ClosestPlayer = target
+					end
+				end
+			end
+		end
+	end
+	return ClosestPlayer
+end
 
 local function runLoop(controlObj, loopFn)
 	if type(controlObj) == "string" then
@@ -93,14 +159,29 @@ function Logic:Initialize(UIReference)
 			return newindex(self, key, value)
 		end))
 	end)
+	-- MAIN TAB
+	runLoop("CameraLockKey", function()
+		local Target = FindPlayerToMouse(nil, {
+		CameraFriendCheck = Toggles.CameraFriendCheck.Value,
+		CameraWallCheck = Toggles.CameraWallCheck.Value
+		})
 
+		if Target and Target.Character then
+			local targetHeadPart = Target.Character:FindFirstChild("Head")
+			if targetHeadPart then
+				Camera.CFrame = CFrame.new(Camera.CFrame.Position, targetHeadPart.Position)
+			end
+		end
+	end)
+
+	-- CHARACTER TAB
     runLoop("VelocityKey", function()
-		if Humanoid and HumanoidRootPart then
-			local direction = Humanoid.MoveDirection
-			local velocity = HumanoidRootPart.AssemblyLinearVelocity
+		if LocalHumanoid and LocalHumanoidRootPart then
+			local direction = LocalHumanoid.MoveDirection
+			local velocity = LocalHumanoidRootPart.AssemblyLinearVelocity
 			local vertical = velocity.Y
 			local horizontal = direction * Options.VelocitySpeed.Value
-			HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(horizontal.X,vertical, horizontal.Z)
+			LocalHumanoidRootPart.AssemblyLinearVelocity = Vector3.new(horizontal.X,vertical, horizontal.Z)
 		end
 	end)
 
