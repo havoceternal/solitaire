@@ -26,7 +26,7 @@ function UI:Initialize()
 
     CameraGroupBox:AddToggle("CameraLock", {
         Text = "cam lock"
-    }):AddKeyPicker("z",{
+    }):AddKeyPicker("CameraLockKey",{
         Text = "cam lock";
         Default = "E";
         Mode = "Toggle";
