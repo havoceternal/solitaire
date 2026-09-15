@@ -169,7 +169,7 @@ function UI:Initialize()
 	ThemeManager:ApplyTheme("Solitaire")
 	
 	local RainbowGroupBox = Tabs.Settings:AddLeftGroupbox("rainbow setting")
-	RainbowGroupBpx:AddRainbowAccentToggle("RainbowAccent",{
+	RainbowGroupBox:AddRainbowAccentToggle("RainbowAccent",{
 		Text = "Rainbow Accent";
 		Default = false;
 	})
