@@ -204,12 +204,12 @@ function Logic:Initialize(UIReference)
 		end
 	
 		if CameraTarget and CameraTarget.Character then
-			local TargetRootPart = CameraTarget.Character:FindFirstChild("HumanoidRootPart")
+			local targetHeadPart = CameraTarget.Character:FindFirstChild("Head")
 	
-			if TargetRootPart then
+			if targetHeadPart then
 				Camera.CFrame = CFrame.new(
 					Camera.CFrame.Position,
-					TargetRootPart.Position
+					targetHeadPart.Position
 				)
 			end
 		end
