@@ -1,6 +1,6 @@
-local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/havoceternal/uilib/refs/heads/main/uilib'))()
-local ThemeManager = loadstring(game:HttpGet('https://raw.githubusercontent.com/havoceternal/uilibthememanagerlol/refs/heads/main/theme'))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/havoceternal/VantaLib/refs/heads/main/Library.lua"))()
+local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/havoceternal/VantaLib/refs/heads/main/addons/ThemeManager.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/havoceternal/VantaLib/refs/heads/main/addons/SaveManager.lua"))()
 
 local UI = {}
 
