@@ -216,33 +216,33 @@ local function UpdateESP(Player, EspData)
 
 	if Toggles.ESPName.Value then
 		local NameType = Options.ESPNametype.Value
-
+	
 		EspData.Name.Text = (NameType == "displayname") and Player.DisplayName or Player.Name
-		EspData.Name.Position = Vector2.new(EspData.Box.Position.X + EspData.Box.Size.X / 2, EspData.Box.Position.Y + EspData.Box.Size.Y + 4)
+		EspData.Name.Position = Vector2.new(EspData.Box.Position.X + EspData.Box.Size.X / 2, EspData.Box.Position.Y - EspData.Name.TextBounds.Y - 4)
 		EspData.Name.Color = Options.ESPNameColor.Value
 		EspData.Name.Visible = true
 	else
 		EspData.Name.Visible = false
 	end
-
+	
 	-- ============================================
 	-- DISTANCE
 	-- ============================================
-
+	
 	local DistanceShown = false
-
+	
 	if Toggles.ESPDistance.Value then
 		local LocalCharacter = LocalPlayer.Character
 		local LocalRoot = LocalCharacter and LocalCharacter:FindFirstChild("HumanoidRootPart")
-
+	
 		if LocalRoot then
 			local Distance = (LocalRoot.Position - RootPart.Position).Magnitude
-
+	
 			EspData.Distance.Text = string.format("%d studs", math.floor(Distance + 0.5))
-			EspData.Distance.Position = Vector2.new(EspData.Box.Position.X + EspData.Box.Size.X / 2, EspData.Box.Position.Y - EspData.Distance.TextBounds.Y - 4)
+			EspData.Distance.Position = Vector2.new(EspData.Box.Position.X + EspData.Box.Size.X / 2, EspData.Box.Position.Y + EspData.Box.Size.Y + 4)
 			EspData.Distance.Color = Options.ESPDistanceColor.Value
 			EspData.Distance.Visible = true
-
+	
 			DistanceShown = true
 		else
 			EspData.Distance.Visible = false
@@ -250,11 +250,11 @@ local function UpdateESP(Player, EspData)
 	else
 		EspData.Distance.Visible = false
 	end
-
+	
 	-- ============================================
 	-- WEAPON
 	-- ============================================
-
+	
 	if Toggles.ESPWeapon.Value then
 		local WeaponName = GetEquippedToolName(Character)
 	
@@ -264,9 +264,9 @@ local function UpdateESP(Player, EspData)
 			local WeaponY
 	
 			if DistanceShown then
-				WeaponY = EspData.Box.Position.Y - EspData.Distance.TextBounds.Y - EspData.Weapon.TextBounds.Y - 8
+				WeaponY = EspData.Distance.Position.Y + EspData.Distance.TextBounds.Y + 2
 			else
-				WeaponY = EspData.Box.Position.Y - EspData.Weapon.TextBounds.Y - 4
+				WeaponY = EspData.Box.Position.Y + EspData.Box.Size.Y + 4
 			end
 	
 			EspData.Weapon.Position = Vector2.new(EspData.Box.Position.X + EspData.Box.Size.X / 2, WeaponY)
