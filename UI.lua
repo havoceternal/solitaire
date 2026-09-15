@@ -26,7 +26,7 @@ function UI:Initialize()
 
     CameraGroupBox:AddToggle("CameraLock", {
         Text = "cam lock"
-    }):AddKeyPicker("CameraLockKey",{
+    }):AddKeyPicker("z",{
         Text = "cam lock";
         Default = "E";
         Mode = "Toggle";
@@ -45,6 +45,7 @@ function UI:Initialize()
 	CameraRadiusDepBox:SetupDependencies({
 		{Toggles.CameraRadius, true}
 	})
+	CameraGroupBox:AddDivider()
 	CameraRadiusDepBox:AddSlider("CameraRadiusSize",{
 		Text = "size";
 		Default = 200;
