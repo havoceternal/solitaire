@@ -163,7 +163,7 @@ function UI:Initialize()
 	SaveManager:SetIgnoreIndexes({ "MenuKeybind" })
 	SaveManager:BuildConfigSection(Tabs.Settings)
 	SaveManager:LoadAutoloadConfig()
-	ThemeManager:ApplyTheme("Havoc")
+	ThemeManager:ApplyTheme("Solitaire")
     
 	return {
 		Library = Library,
