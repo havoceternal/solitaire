@@ -158,6 +158,8 @@ function UI:Initialize()
     Library.KeybindFrame.Visible = true
 	Library.ToggleKeybind = Enum.KeyCode.RightControl
 
+	-- SETTINGS TAB
+
 	SaveManager:SetLibrary(Library)
 	ThemeManager:SetLibrary(Library)
 	SaveManager:IgnoreThemeSettings()
@@ -165,6 +167,12 @@ function UI:Initialize()
 	SaveManager:BuildConfigSection(Tabs.Settings)
 	SaveManager:LoadAutoloadConfig()
 	ThemeManager:ApplyTheme("Solitaire")
+	
+	local RainbowGroupBox = Tabs.Settings:AddLeftGroupbox("rainbow setting")
+	RainbowGroupBpx:AddRainbowAccentToggle("RainbowAccent",{
+		Text = "Rainbow Accent";
+		Default = false;
+	})
     
 	return {
 		Library = Library,
