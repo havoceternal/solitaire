@@ -23,28 +23,33 @@ LocalPlayer.CharacterAdded:Connect(Setup)
 Setup(LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait())
 
 local function checkWall(target)
-    if not LocalHumanoidRootPart then
-        return false
-    end
+	if not LocalHumanoidRootPart then
+		return false
+	end
 
-    local targetRootPart = target:FindFirstChild("HumanoidRootPart")
-    if not targetRootPart then
-        return false
-    end
+	local TargetCharacter = target.Character
+	if not TargetCharacter then
+		return false
+	end
 
-    local Origin = LocalHumanoidRootPart.Position
-    local Direction = targetRootPart.Position - Origin
+	local TargetRootPart = TargetCharacter:FindFirstChild("HumanoidRootPart")
+	if not TargetRootPart then
+		return false
+	end
 
-    local Params = RaycastParams.new()
-    Params.FilterType = Enum.RaycastFilterType.Exclude
-    Params.FilterDescendantsInstances = {
-        LocalCharacter,
-        target
-    }
+	local Origin = LocalHumanoidRootPart.Position
+	local Direction = TargetRootPart.Position - Origin
 
-    local Result = workspace:Raycast(Origin, Direction, Params)
+	local Params = RaycastParams.new()
+	Params.FilterType = Enum.RaycastFilterType.Exclude
+	Params.FilterDescendantsInstances = {
+		LocalCharacter,
+		TargetCharacter
+	}
 
-    return Result ~= nil
+	local Result = workspace:Raycast(Origin, Direction, Params)
+
+	return Result ~= nil
 end
 
 local function checkFriend(target)
