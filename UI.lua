@@ -173,7 +173,8 @@ function UI:Initialize()
 		Text = "Rainbow Accent";
 		Default = false;
 	})
-    
+
+    local test = Tabs.Settings:AddLeftGroupbox("eeeeeeg")
 	return {
 		Library = Library,
 		Toggles = Toggles,
