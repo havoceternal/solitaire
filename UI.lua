@@ -56,7 +56,7 @@ function UI:Initialize()
 	})
 	CameraGroupBox:AddDropdown("CameraLockToggleType",{
 		Values = {"Toggle","Hold"};
-		Default = 1;
+		Default = 2;
 		Multi = false;
 		Text = "toggle type";
 		Callback = function(Value)
