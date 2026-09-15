@@ -218,7 +218,7 @@ local function UpdateESP(Player, EspData)
 		local NameType = Options.ESPNametype.Value
 	
 		EspData.Name.Text = (NameType == "displayname") and Player.DisplayName or Player.Name
-		EspData.Name.Position = Vector2.new(EspData.Box.Position.X + EspData.Box.Size.X / 2, EspData.Box.Position.Y - EspData.Name.TextBounds.Y - 4)
+		EspData.Name.Position = Vector2.new(RootPosition.X, RootPosition.Y - 30)
 		EspData.Name.Color = Options.ESPNameColor.Value
 		EspData.Name.Visible = true
 	else
@@ -239,7 +239,7 @@ local function UpdateESP(Player, EspData)
 			local Distance = (LocalRoot.Position - RootPart.Position).Magnitude
 	
 			EspData.Distance.Text = string.format("%d studs", math.floor(Distance + 0.5))
-			EspData.Distance.Position = Vector2.new(EspData.Box.Position.X + EspData.Box.Size.X / 2, EspData.Box.Position.Y + EspData.Box.Size.Y + 4)
+			EspData.Distance.Position = Vector2.new(RootPosition.X, RootPosition.Y + 30)
 			EspData.Distance.Color = Options.ESPDistanceColor.Value
 			EspData.Distance.Visible = true
 	
@@ -264,12 +264,12 @@ local function UpdateESP(Player, EspData)
 			local WeaponY
 	
 			if DistanceShown then
-				WeaponY = EspData.Distance.Position.Y + EspData.Distance.TextBounds.Y + 2
+				WeaponY = RootPosition.Y + 30 + EspData.Distance.TextBounds.Y + 2
 			else
-				WeaponY = EspData.Box.Position.Y + EspData.Box.Size.Y + 4
+				WeaponY = RootPosition.Y + 30
 			end
 	
-			EspData.Weapon.Position = Vector2.new(EspData.Box.Position.X + EspData.Box.Size.X / 2, WeaponY)
+			EspData.Weapon.Position = Vector2.new(RootPosition.X, WeaponY)
 			EspData.Weapon.Color = Options.ESPWeaponColor.Value
 			EspData.Weapon.Visible = true
 		else
