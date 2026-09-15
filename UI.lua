@@ -167,6 +167,7 @@ function UI:Initialize()
 	SaveManager:BuildConfigSection(Tabs.Settings)
 	SaveManager:LoadAutoloadConfig()
 	ThemeManager:ApplyTheme("Solitaire")
+	local test = Tabs.Settings:AddLeftGroupbox("eeeeeeg")
 	
 	local RainbowGroupBox = Tabs.Settings:AddLeftGroupbox("rainbow setting")
 	RainbowGroupBox:AddRainbowAccentToggle("RainbowAccent",{
@@ -174,7 +175,6 @@ function UI:Initialize()
 		Default = false;
 	})
 
-    local test = Tabs.Settings:AddLeftGroupbox("eeeeeeg")
 	return {
 		Library = Library,
 		Toggles = Toggles,
